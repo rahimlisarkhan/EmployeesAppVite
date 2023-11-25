@@ -1,9 +1,13 @@
 import React from "react";
-import { Navbar, NavbarBrand } from "reactstrap";
+import { Badge, Navbar, NavbarBrand } from "reactstrap";
 
-import Logo from "../../../assets/react.svg";
+import { useGlobalProvider } from "../../store/global/GlobalProvider";
 
 export const Header = () => {
+  const { state } = useGlobalProvider();
+
+  const users = state.users;
+
   return (
     <>
       <Navbar color="dark" dark>
@@ -19,7 +23,7 @@ export const Header = () => {
               width: 45,
             }}
           />
-          Employees App
+          Employees App <Badge color="danger">{users?.length}</Badge>
         </NavbarBrand>
       </Navbar>
     </>

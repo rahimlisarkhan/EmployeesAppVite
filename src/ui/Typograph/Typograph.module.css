@@ -1,0 +1,39 @@
+.title5 {
+  font-size: 20px;
+}
+
+.body1 {
+  font-size: 18px;
+}
+
+.body2 {
+  font-size: 16px;
+}
+
+.headline {
+  font-size: 14px;
+}
+
+.caption {
+  font-size: 12px;
+}
+
+.left {
+  text-align: left;
+}
+.center {
+  text-align: center;
+}
+.right {
+  text-align: right;
+}
+
+.regular {
+  font-weight: 400;
+}
+.medium {
+  font-weight: 500;
+}
+.bold {
+  font-weight: 600;
+}

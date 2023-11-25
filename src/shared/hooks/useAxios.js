@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-const useAxios = ({ requestFn }) => {
+const useAxios = ({ requestFn, onSuccess, onError }) => {
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -10,9 +10,11 @@ const useAxios = ({ requestFn }) => {
     requestFn()
       .then((res) => {
         setData(res);
+        onSuccess?.(res);
       })
       .catch((err) => {
         setError(err);
+        onError?.(err);
       })
       .finally(() => {
         setLoading(false);
