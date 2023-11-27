@@ -5,6 +5,7 @@ import NotFound from "./pages/NotFound";
 import Detail from "./pages/Detail";
 import DetailSetting from "./pages/DetailSetting";
 import About from "./pages/About";
+import CreatePage from "./pages/Create";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
       <Route path={ROUTER.DETAIL_SETTING} element={<DetailSetting />} />
 
       <Route path={ROUTER.ABOUT} element={<About />} />
+      <Route path={ROUTER.CREATE} element={<CreatePage />} />
 
       <Route path="*" element={<NotFound />} />
     </Routes>

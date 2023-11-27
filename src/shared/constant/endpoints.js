@@ -1,4 +1,4 @@
 export const ENDPOINTS = {
-  USERS: "users",
-  USER_ID: (id) => "users/" + id,
+  USERS: "posts",
+  USER_ID: (id) => "posts/" + id,
 };

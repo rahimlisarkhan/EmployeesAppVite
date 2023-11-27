@@ -3,4 +3,5 @@ export const ROUTER = {
   DETAIL: "/detail/:id",
   DETAIL_SETTING: "/detail/:id/setting",
   ABOUT: "/about",
+  CREATE: "/create",
 };

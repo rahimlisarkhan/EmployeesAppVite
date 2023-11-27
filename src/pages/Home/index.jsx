@@ -19,13 +19,18 @@ const HomePage = () => {
   const { loading } = useAxios({
     requestFn: getUsers,
     onSuccess: (res) => {
-      dispatch({ type: type.FILL_USERS, payload: res?.data });
+      dispatch({
+        type: type.FILL_USERS,
+        payload: res?.data.filter((item) => item.id > 100),
+      });
     },
   });
 
   const navigate = useNavigate();
 
   const users = useMemo(() => state?.users, [state.users]);
+
+  console.log("users", users);
 
   const handleFetchRemove = useCallback(() => {
     rmvUser(currentUser.id)

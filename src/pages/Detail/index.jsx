@@ -48,17 +48,17 @@ const Detail = () => {
                 <p className="h4">{userInfo?.phone}</p>
                 <p className="h4">{userInfo?.website}</p>
 
-                <hr />
+                {/* <hr />
                 <h2>Address:</h2>
-                <p className="h4">{userInfo?.address.city}</p>
-                <p className="h4">{userInfo?.address.street}</p>
-                <p className="h4">{userInfo?.address.suite}</p>
+                <p className="h4">{userInfo?.address?.city}</p>
+                <p className="h4">{userInfo?.address?.street}</p>
+                <p className="h4">{userInfo?.address?.suite}</p>
 
                 <hr />
                 <h2>Company:</h2>
-                <p className="h4">{userInfo?.company.name}</p>
-                <p className="h4">{userInfo?.company.catchPhrase}</p>
-                <p className="h4">{userInfo?.company.name}</p>
+                <p className="h4">{userInfo?.company?.name}</p>
+                <p className="h4">{userInfo?.company?.catchPhrase}</p>
+                <p className="h4">{userInfo?.company?.name}</p> */}
               </div>
             </>
           )}

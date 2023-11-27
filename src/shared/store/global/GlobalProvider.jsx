@@ -20,6 +20,13 @@ const reducer = (state, action) => {
 
       return { ...state, users: filterUsers };
 
+    case type.ADD_USER:
+      const newUser = action.payload;
+
+      const newUsers = [...state.users, newUser];
+
+      return { ...state, users: newUsers };
+
     default:
       return state;
   }

@@ -23,6 +23,8 @@ const useAxios = ({ requestFn, onSuccess, onError }) => {
 
   useEffect(() => {
     handleRequestData();
+
+    console.log("working....");
   }, []);
 
   return { data, error, loading };
