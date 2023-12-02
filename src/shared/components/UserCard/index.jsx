@@ -13,10 +13,14 @@ import { FaPhoneAlt, FaTrash } from "react-icons/fa";
 import { IoMdMail } from "react-icons/io";
 import Typograph from "../../../ui/Typograph";
 
+const defaultImg =
+  "https://media.istockphoto.com/id/1337144146/vector/default-avatar-profile-icon-vector.jpg?s=612x612&w=0&k=20&c=BIbFwuv7FxTWvh5S3vB6bkT0Qv8Vn8N5Ffseq84ClGI=";
+
 const UserCard = ({
   name = "User name",
   email = "email@gmail.com",
   phone = "xxx-xx-xxx",
+  img_url,
   onClick,
   onRemove,
 }) => {
@@ -30,7 +34,8 @@ const UserCard = ({
         alt="Sample"
         height={250}
         className="object-fit-cover"
-        src="https://media.istockphoto.com/id/1337144146/vector/default-avatar-profile-icon-vector.jpg?s=612x612&w=0&k=20&c=BIbFwuv7FxTWvh5S3vB6bkT0Qv8Vn8N5Ffseq84ClGI="
+        // src={img_url || defaultImg}
+        src={img_url ?? defaultImg}
       />
       <CardBody>
         <Typograph as="p" variant="title5" weight="bold">

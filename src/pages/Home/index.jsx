@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { Header } from "../../shared/components/Header";
 import UserCard from "../../shared/components/UserCard";
 import { Container } from "reactstrap";
@@ -9,6 +9,7 @@ import { useGlobalProvider } from "../../shared/store/global/GlobalProvider";
 import { Button, Modal, ModalHeader, ModalFooter } from "reactstrap";
 import { GLOBAL_PROVIDER_TYPE as type } from "../../shared/store/global/type";
 import { toast } from "react-toastify";
+import { useMutateAxios } from "../../shared/hooks/useMutateAxios";
 
 const HomePage = () => {
   const [modal, setModal] = useState(false);
@@ -26,6 +27,19 @@ const HomePage = () => {
     },
   });
 
+  const { mutate } = useMutateAxios({
+    requestFn: rmvUser,
+    onSuccess: () => {
+      toast.success("Ugurla silindi!!");
+
+      dispatch({ type: type.RMV_USER, payload: currentUser.id });
+      setModal(false);
+    },
+    onError: () => {
+      toast.error(err.message);
+    },
+  });
+
   const navigate = useNavigate();
 
   const users = useMemo(() => state?.users, [state.users]);
@@ -33,16 +47,18 @@ const HomePage = () => {
   console.log("users", users);
 
   const handleFetchRemove = useCallback(() => {
-    rmvUser(currentUser.id)
-      .then(() => {
-        toast.success("Ugurla silindi!!");
+    mutate(currentUser.id);
 
-        dispatch({ type: type.RMV_USER, payload: currentUser.id });
-        setModal(false);
-      })
-      .catch((err) => {
-        toast.error(err.message);
-      });
+    // rmvUser(currentUser.id)
+    //   .then(() => {
+    //     toast.success("Ugurla silindi!!");
+
+    //     dispatch({ type: type.RMV_USER, payload: currentUser.id });
+    //     setModal(false);
+    //   })
+    //   .catch((err) => {
+    //     toast.error(err.message);
+    //   });
   }, [currentUser]);
 
   return (

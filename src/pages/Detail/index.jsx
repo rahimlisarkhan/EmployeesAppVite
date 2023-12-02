@@ -7,6 +7,7 @@ import { getUserID } from "../../services/user";
 import { useNavigate } from "react-router-dom";
 
 import { Button } from "reactstrap";
+import moment from "moment";
 
 const Detail = () => {
   const { id } = useParams();
@@ -17,7 +18,7 @@ const Detail = () => {
 
   const navigate = useNavigate();
 
-  console.log("userInfo", userInfo);
+  const createDate = moment(userInfo?.create_at).fromNow();
 
   return (
     <>
@@ -30,8 +31,11 @@ const Detail = () => {
             <>
               <div className="w-25">
                 <img
-                  className="img-fluid"
-                  src="https://media.istockphoto.com/id/1337144146/vector/default-avatar-profile-icon-vector.jpg?s=612x612&w=0&k=20&c=BIbFwuv7FxTWvh5S3vB6bkT0Qv8Vn8N5Ffseq84ClGI="
+                  className="img-fluid rounded mb-3"
+                  src={
+                    userInfo?.img_url ??
+                    "https://media.istockphoto.com/id/1337144146/vector/default-avatar-profile-icon-vector.jpg?s=612x612&w=0&k=20&c=BIbFwuv7FxTWvh5S3vB6bkT0Qv8Vn8N5Ffseq84ClGI="
+                  }
                 />
                 <Button
                   size="lg"
@@ -47,6 +51,7 @@ const Detail = () => {
                 <p className="h2">{userInfo?.email}</p>
                 <p className="h4">{userInfo?.phone}</p>
                 <p className="h4">{userInfo?.website}</p>
+                <p className="h5">Yaranma tarixi: {createDate}</p>
 
                 {/* <hr />
                 <h2>Address:</h2>

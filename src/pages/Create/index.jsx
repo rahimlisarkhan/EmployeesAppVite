@@ -14,8 +14,10 @@ import { addUser } from "../../services/user";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { ROUTER } from "../../shared/constant/router";
+import { isValidEmail, isValidPhone } from "../../shared/utils/validRegex";
 
-const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
+import moment from "moment";
+import { useMutateAxios } from "../../shared/hooks/useMutateAxios";
 
 const validate = (values) => {
   let errors = {};
@@ -30,6 +32,8 @@ const validate = (values) => {
 
   if (!values.phone) {
     errors.phone = "Required";
+  } else if (!isValidPhone(values.phone)) {
+    errors.phone = "Invalid phone number";
   }
 
   if (!values.address) {
@@ -38,7 +42,7 @@ const validate = (values) => {
 
   if (!values.email) {
     errors.email = "Required";
-  } else if (!emailRegex.test(values.email)) {
+  } else if (!isValidEmail(values.email)) {
     errors.email = "Invalid email address";
   }
 
@@ -46,42 +50,64 @@ const validate = (values) => {
 };
 
 const CreatePage = () => {
-  // const [text,setText] = useState()
-
   const navigate = useNavigate();
+
+  const { mutate, loading } = useMutateAxios({
+    requestFn: addUser,
+    onSuccess: () => {
+      toast.success("Successfully");
+      formik.handleReset();
+      navigate(ROUTER.HOME);
+    },
+    onError: () => {
+      toast.err(err.message);
+    },
+  });
+
+  // const [loading, setLoading] = useState(false);
+
+  const createDate = moment().valueOf();
 
   const formik = useFormik({
     initialValues: {
       name: "",
+      img_url: "",
       phone: "",
       email: "",
       address: "",
+      create_at: createDate,
     },
     validate,
     onSubmit: (values) => {
       console.log('"onSubmit', values);
-      addPostFetch(values);
-      formik.handleReset();
+
+      mutate(values);
+      // addPostFetch(values);
     },
   });
 
-  const addPostFetch = (form) => {
-    addUser(form)
-      .then((res) => {
-        console.log("res", res);
-        toast.success("Successfully");
-        navigate(ROUTER.HOME);
-      })
-      .catch((err) => {
-        toast.err(err.message);
-      });
-  };
+  // const addPostFetch = (form) => {
+  //   form.create_at = createDate;
 
-  console.log('"formik', formik);
+  //   setLoading(true);
+
+  //   addUser(form)
+  //     .then((res) => {
+  //       console.log("res", res);
+  //       toast.success("Successfully");
+  //       formik.handleReset();
+  //       navigate(ROUTER.HOME);
+  //     })
+  //     .catch((err) => {
+  //       toast.err(err.message);
+  //     })
+  //     .finally(() => {
+  //       setLoading(false);
+  //     });
+
+  // };
 
   const disableBtn = !!Object.values(formik.errors).length;
-
-  console.log("disableBtn", disableBtn);
 
   return (
     <>
@@ -105,6 +131,19 @@ const CreatePage = () => {
               size="lg"
               name="name"
               value={formik.values.name}
+              onChange={formik.handleChange}
+            />
+            {formik.errors.name && (
+              <FormText color="danger">{formik.errors.name}</FormText>
+            )}
+          </FormGroup>
+          <FormGroup>
+            <Label>Profile image:</Label>
+            <Input
+              placeholder="Your image"
+              size="lg"
+              name="img_url"
+              value={formik.values.img_url}
               onChange={formik.handleChange}
             />
             {formik.errors.name && (
@@ -152,12 +191,12 @@ const CreatePage = () => {
           </FormGroup>
           <Button
             type="submit"
-            disabled={disableBtn}
+            disabled={disableBtn || loading}
             size="lg"
             color="danger"
             block
           >
-            Create
+            {loading ? "Loading..." : "Create"}
           </Button>
         </form>
       </Container>
@@ -167,3 +206,20 @@ const CreatePage = () => {
 };
 
 export default CreatePage;
+
+// const group = {
+//   name: "Besteller Izzet Colors",
+//   colors: [
+//     { name: "Color Name", color: "#fsfsfs" },
+//     { name: "Color Name", color: "#fsfsfs" },
+//     { name: "Color Name", color: "#fsfsfs" },
+//     { name: "Color Name", color: "#fsfsfs" },
+//     { name: "Color Name", color: "#fsfsfs" },
+//     { name: "Color Name", color: "#fsfsfs" },
+//   ],
+// };
+
+// const onCopyFrame = (value) => {
+//   toast.success('Copied!');
+//   navigator.clipboard.writeText(value);
+// };

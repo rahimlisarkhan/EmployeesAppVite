@@ -8,6 +8,8 @@ const initialState = {
   isLoading: false,
 };
 
+//? Array ile edeceymiz herseyi evvelceden new Set convert ede bilerik.Sebeb eger data 1000 2000 uzeridirse UI terefde
+
 const reducer = (state, action) => {
   switch (action.type) {
     case type.FILL_USERS:
