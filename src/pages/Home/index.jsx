@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Header } from "../../shared/components/Header";
 import UserCard from "../../shared/components/UserCard";
 import { Container } from "reactstrap";
@@ -10,22 +10,67 @@ import { Button, Modal, ModalHeader, ModalFooter } from "reactstrap";
 import { GLOBAL_PROVIDER_TYPE as type } from "../../shared/store/global/type";
 import { toast } from "react-toastify";
 import { useMutateAxios } from "../../shared/hooks/useMutateAxios";
+import { useQuery } from "react-query";
+import { QUERIES } from "../../shared/constant/queries";
 
 const HomePage = () => {
   const [modal, setModal] = useState(false);
   const [currentUser, setCurrentUser] = useState();
 
-  const { state, dispatch } = useGlobalProvider();
+  // const { state, dispatch } = useGlobalProvider();
 
-  const { loading } = useAxios({
-    requestFn: getUsers,
-    onSuccess: (res) => {
-      dispatch({
-        type: type.FILL_USERS,
-        payload: res?.data.filter((item) => item.id > 100),
-      });
+  // const a = useQuery(QUERIES.USER, () => getUsers(params.id));
+  // const {
+  //   data: users,
+  //   isLoading,
+  //   isError,
+  // } = useQuery(QUERIES.USER, async () => {
+  //   const response = await getUsers();
+  //   // return response.data;
+  //   return response.data.filter((item) => item.id > 100);
+  // });
+
+  const {
+    data: users,
+    isLoading,
+    isError,
+    error,
+    refetch,
+    // remove
+  } = useQuery({
+    queryKey: QUERIES.USER,
+    queryFn: async () => {
+      const response = await getUsers();
+      // return response.data;
+      return response.data.filter((item) => item.id > 100);
     },
+    onSuccess: (data) => {
+      console.log("data", data);
+      // toast.success("Success")
+    },
+    onError: (err) => {
+      console.log("err", err);
+      // navigate("/404")
+      // toast.error("Error")
+    },
+    // refetchInterval
+    // enabled: false,
+    refetchOnReconnect: true,
+    refetchInterval: false,
+    // refetchInterval: 30000,
+    refetchIntervalInBackground: false,
+    refetchOnWindowFocus: false,
   });
+
+  // const { loading } = useAxios({
+  //   requestFn: getUsers,
+  //   onSuccess: (res) => {
+  //     dispatch({
+  //       type: type.FILL_USERS,
+  //       payload: res?.data.filter((item) => item.id > 100),
+  //     });
+  //   },
+  // });
 
   const { mutate } = useMutateAxios({
     requestFn: rmvUser,
@@ -42,9 +87,7 @@ const HomePage = () => {
 
   const navigate = useNavigate();
 
-  const users = useMemo(() => state?.users, [state.users]);
-
-  console.log("users", users);
+  // const users = useMemo(() => state?.users, [state.users]);
 
   const handleFetchRemove = useCallback(() => {
     mutate(currentUser.id);
@@ -60,6 +103,16 @@ const HomePage = () => {
     //     toast.error(err.message);
     //   });
   }, [currentUser]);
+
+  // useEffect(() => {
+  //   // if (filan1 && !filan2) {
+  //   refetch();
+  //   // }
+  // }, []);
+
+  if (isError) {
+    return <h1>Error...</h1>;
+  }
 
   return (
     <>
@@ -83,12 +136,13 @@ const HomePage = () => {
       </Modal>
       <Header />
       <Container>
-        {loading ? (
+        {isLoading ? (
           <h1>Loading...</h1>
         ) : (
           <div className="d-flex flex-wrap gap-3 my-5">
             {users?.map((user) => (
               <UserCard
+                key={user.id}
                 {...user}
                 onClick={() => navigate("/detail/" + user.id)}
                 onRemove={

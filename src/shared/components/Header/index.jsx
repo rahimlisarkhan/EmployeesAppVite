@@ -5,15 +5,20 @@ import { useGlobalProvider } from "../../store/global/GlobalProvider";
 import { useLocation, useNavigate } from "react-router-dom";
 import { IoMdAddCircleOutline } from "react-icons/io";
 import { ROUTER } from "../../constant/router";
+import { useQueryClient } from "react-query";
+import { QUERIES } from "../../constant/queries";
 
 export const Header = () => {
-  const { state } = useGlobalProvider();
+  const queryClient = useQueryClient();
+  const users = queryClient.getQueryData(QUERIES.USER);
+
+  // const { state } = useGlobalProvider();
 
   const { pathname } = useLocation();
 
   const navigate = useNavigate();
 
-  const users = state.users;
+  // const users = state.users;
 
   const isCreatePage = ROUTER.CREATE == pathname;
 

@@ -18,6 +18,8 @@ import { isValidEmail, isValidPhone } from "../../shared/utils/validRegex";
 
 import moment from "moment";
 import { useMutateAxios } from "../../shared/hooks/useMutateAxios";
+import { useMutation, useQueryClient } from "react-query";
+import { QUERIES } from "../../shared/constant/queries";
 
 const validate = (values) => {
   let errors = {};
@@ -51,10 +53,18 @@ const validate = (values) => {
 
 const CreatePage = () => {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
-  const { mutate, loading } = useMutateAxios({
-    requestFn: addUser,
-    onSuccess: () => {
+  const { mutate, isLoading } = useMutation({
+    mutationFn: addUser,
+    onSuccess: (res) => {
+      console.log("res", res);
+      queryClient.invalidateQueries(QUERIES.USER);
+
+      // const users = queryClient.getQueryData(QUERIES.USER)
+      // const newUsers = [res.data, ...users]
+      // queryClient.setQueryData(QUERIES.USER,newUsers)
+
       toast.success("Successfully");
       formik.handleReset();
       navigate(ROUTER.HOME);
@@ -63,6 +73,18 @@ const CreatePage = () => {
       toast.err(err.message);
     },
   });
+
+  // const { mutate, loading } = useMutateAxios({
+  //   requestFn: addUser,
+  //   onSuccess: () => {
+  //     toast.success("Successfully");
+  //     formik.handleReset();
+  //     navigate(ROUTER.HOME);
+  //   },
+  //   onError: () => {
+  //     toast.err(err.message);
+  //   },
+  // });
 
   // const [loading, setLoading] = useState(false);
 
@@ -191,12 +213,12 @@ const CreatePage = () => {
           </FormGroup>
           <Button
             type="submit"
-            disabled={disableBtn || loading}
+            disabled={disableBtn || isLoading}
             size="lg"
             color="danger"
             block
           >
-            {loading ? "Loading..." : "Create"}
+            {isLoading ? "Loading..." : "Create"}
           </Button>
         </form>
       </Container>
